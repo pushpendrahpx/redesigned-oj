@@ -2,6 +2,14 @@
 # Welcome to redesigned-oj!
 This is an online-judge implements basic functionalities and unique features that are attractions of this online-judge.
 
+
+
+### Database Design
+1. Notion Link (Documented) - [Notion Document Link](https://pushpendrahpx.notion.site/Database-Design-111f164218aa471d966970db30c99728)
+2. ER Diagram - [Basic ER Diagram of System](https://erdplus.com/edit-diagram/5ab7538f-4725-40a7-9da4-a5cc876e1150)
+3. Schema Design - [Basic Schema Design of System](https://drawsql.app/none-538/diagrams/online-judge)
+
+
 ### Requirements
 Python3, pip3, Django
 
