@@ -16,5 +16,5 @@ class Submission(models.Model):
     verdict = models.CharField(max_length=20)
     language = models.CharField(null=False, max_length=20)
     status = models.CharField(null=False, max_length=20)
-    submissionTime = models.DateTimeField(default=now, editable=False)
-    score=models.IntegerField()
+    submissionTime = models.DateTimeField(default=now, editable=False, blank=True)
+    score=models.IntegerField() 
