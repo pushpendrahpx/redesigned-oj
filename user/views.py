@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User as UserModel
-from django.contrib.auth import authenticate, login as LibraryLogin
+from django.contrib.auth import authenticate, login as LibraryLogin, logout as LibraryLogout
 from django.forms.models import model_to_dict
 
 from .models import User 
@@ -57,6 +57,21 @@ def login(request):
 
         return JsonResponse({'status':'Login EXCEPTION OCCURED', 'exception':str(e)}, status=400)
 
+
+def logout(request):
+    try:
+        if request.user.is_authenticated:
+            LibraryLogout(request)
+            # Do something for authenticated users.
+            return JsonResponse({'message':'logout sucessfull'}, status=200)
+
+
+        else:
+            # Do something for anonymous users
+            return JsonResponse({'message':'authentication failed'}, status=400)
+
+    except Exception as e: 
+        return JsonResponse({'status':'Logout EXCEPTION OCCURED', 'exception':str(e)}, status=400)
 
 
 def getProfile(request):
