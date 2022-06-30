@@ -49,21 +49,36 @@ def create_submission(request):
     if(tmpcompile.returncode == 0):
 
         tmpuseroutput = sb.run("./a.out",stdout=sb.PIPE, stderr=sb.PIPE)
-        print(tmpuseroutput)
+
+        print('sdf')
+        problemobj = Problem.objects.get(problemcode=(problemcode))
+        
+        score = problemobj.score
+        correctoutput = problemobj.correctoutput
+
+        print(correctoutput.split())
+
+
+        useroutput = tmpuseroutput.stdout
+        useroutput = useroutput.decode('unicode_escape')
+        print(str(useroutput).split())
+
+
+        if(correctoutput.split() == str(useroutput).split()):
+            verdict = "ACCEPTED";
+            status = "SUBMITTED"    
+
+        else:
+            verdict = "WRONG ANSWER"
+            status = "SUBMITTED"
+
+        
 
         # if(tmpuseroutput.returncode != 0):
         #     return JsonResponse({'status':tmpcompile.stderr}, status=401)
 
-        useroutput = tmpuseroutput.stdout
-        useroutput = useroutput.decode('unicode_escape')
-        # print(str(useroutput))
 
         submissionTime = "submissionTime"
-        verdict = "ACCEPTED";
-        status = "SUBMITTED"    
-
-        problemobj = Problem.objects.get(problemcode=(problemcode))
-        score = problemobj.score
         
 
         newSubmission = Submission.objects.create(problem_id=problemobj.id, user_id=user_id, usercode=usercode, useroutput=useroutput, verdict=verdict, language=language, status=status, score=score)
