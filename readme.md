@@ -2,6 +2,16 @@
 # Welcome to redesigned-oj!
 This is an online-judge implements basic functionalities and unique features that are attractions of this online-judge.
 
+### Requirements
+Python3, pip3, Django
+
+### Steps of Installation
+1. Install all the dependencies from ```requirements.txt```
+2. Make sure to create database tables according to models requirements
+3. ``` python manage.py migrate ```
+4. ``` python3 manage.py runserver ```
+
+
 ## Contributors
 <table>
   <tr>
@@ -9,3 +19,6 @@ This is an online-judge implements basic functionalities and unique features tha
     
   </tr>
  </table>
+
+
+

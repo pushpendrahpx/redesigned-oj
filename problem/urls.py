@@ -1,5 +1,5 @@
 from django.urls import include, path
 from . import views
 urlpatterns = [
-        path('index/', views.index, name='main-view'),
+        path('create_problem/', views.create_problem, name='main-view'),
 ]

@@ -60,6 +60,9 @@ def login(request):
 
 def logout(request):
     try:
+        if(request.method != "POST"):
+            return JsonResponse({'status':'Invalid Register Method'}, status=400)
+        
         if request.user.is_authenticated:
             LibraryLogout(request)
             # Do something for authenticated users.
@@ -76,6 +79,9 @@ def logout(request):
 
 def getProfile(request):
     try:
+        if(request.method != "GET"):
+            return JsonResponse({'status':'Invalid Register Method'}, status=400)
+        
         if request.user.is_authenticated:
             print("token authenticated")
             # Do something for authenticated users.
