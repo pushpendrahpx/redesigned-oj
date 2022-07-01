@@ -8,8 +8,11 @@ from pkg_resources import require
 # Create your models here.
 
 
-class Tags(models.Model):
+class Tag(models.Model):
     tagname = models.CharField(max_length=20)
+
+
+
 
 
 class Problem(models.Model):
@@ -28,8 +31,18 @@ class Problem(models.Model):
     correctoutput = models.TextField(null=False, default='')
 
 
-class ProblemsHavingTags(models.Model):
+class Testcase(models.Model):
+    title = models.CharField(null=False, default='', max_length=50)
+    input_path = models.TextField(null=False, default='')
+    output_path = models.TextField(null=False, default='')
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    tags = models.ForeignKey(Tags, on_delete=models.CASCADE)
+
+
+
+
+
+class ProblemsHavingTag(models.Model):
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    tags = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
 
