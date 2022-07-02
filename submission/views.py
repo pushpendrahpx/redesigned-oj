@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 
 
 from .models import Submission
-from problem.models import Problem
+from problem.models import Problem, Testcase
 
 
 
@@ -39,100 +39,160 @@ def create_submission(request):
         usercode=request.body.decode("utf-8")
         language=request.headers["code-language"]
 
-
+ 
         # newsubmission = Submission(user_id=user, problem_id=problem, usercode=userc)
         cppfilename = str(user_id)+"_"+str(problemcode)+"_code.cpp";
         f = open(cppfilename, "w")
         f.write(usercode)
         f.close()
         
-        
-        tmpcompile = sb.run("g++ "+cppfilename, shell=True,stdout=sb.PIPE, stderr=sb.PIPE)
-        # if(tmpcompile.returncode != 0):
-        #     return JsonResponse({'status':tmpcompile.stderr}, status=401)
 
-        print("COMPILED")
-        if(tmpcompile.returncode == 0):
 
-            print("CHECKING")
 
-            problemstdin= open("in.txt","r")
-            tmpuseroutput = sb.run("./a.out",stdout=sb.PIPE, stderr=sb.PIPE, stdin=problemstdin)
-            problemstdin.close()
-        
+        isUserCodeAcceptable = True
+        isRunTimeError = False
+        isCompilationError = False
 
-            print("COMPILED")
-            print('sdf')
-            problemobj = Problem.objects.get(problemcode=(problemcode))
+
+        isCompileSuccess=True
+        try:
             
-            score = problemobj.score
-            correctoutput = problemobj.correctoutput
+            tmpcompile = sb.run("g++ "+cppfilename, shell=True,stdout=sb.PIPE, stderr=sb.PIPE)
 
-            print(correctoutput.split())
-
-
-            useroutput = tmpuseroutput.stdout
-            useroutput = useroutput.decode('unicode_escape')
-            print(str(useroutput).split())
-
-            if(correctoutput.split() == str(useroutput).split()):
-                verdict = "ACCEPTED";
-                status = "SUBMITTED"    
-
-            else:
-                verdict = "WRONG ANSWER"
-                status = "SUBMITTED"
-
-            
-
-            # if(tmpuseroutput.returncode != 0):
-            #     return JsonResponse({'status':tmpcompile.stderr}, status=401)
-
-
-            submissionTime = "submissionTime"
-            
-            newSubmission = Submission.objects.create(problem_id=problemobj.id, user_id=user_id, usercode=usercode, useroutput=useroutput, verdict=verdict, language=language, status=status, score=score)
-
-
-            print(newSubmission)
-            
-            f = open(str('files_usersubmissions/'+str(newSubmission.id)+'.txt'), "w")
-            f.write(useroutput)
-            f.close()
-
-
-            
-            if os.path.exists(cppfilename):
-                os.remove(cppfilename)
-
-            
-
-            if os.path.exists("a.out"):
-                os.remove("a.out")
-            return JsonResponse({
-                'verdict':verdict,
-                'status' : status,    
-                'submission':str(model_to_dict(newSubmission))
-            })
-
-        else:
-            useroutput = tmpcompile.stderr
+        except ew:
+            # print(ew)
+            isCompileSuccess= False
+            isCompilationError = True
+            isUserCodeAcceptable = False
             verdict = "COMPILATION ERROR"
-            status = "COMPILATION ERRROR"
-            problemobj = Problem.objects.get(problemcode=problemcode)
-            score = problemobj.score
+            status = "COMPILATION ERROR"
 
-            newSubmission = Submission.objects.create(problem_id=problemobj.id, user_id=user_id, usercode=usercode, useroutput=useroutput, verdict=verdict, language=language, status=status, score=score)
 
-            f = open(str('files_usersubmissions/'+str(newSubmission.id)+'.txt'), "w")
-            f.write(useroutput.decode("utf-8"))
-            f.close()
 
-            return JsonResponse({
-                'verdict':verdict,
-                'status' : status,   
-                'submission':str(model_to_dict(newSubmission))
-            })
+        
+        
+        
+
+        if(isCompileSuccess and tmpcompile.returncode != 0):
+            isCompilationError = True
+            isUserCodeAcceptable = False
+            verdict = "COMPILATION ERROR"
+            status = "COMPILATION ERROR"
+
+        
+
+        problemMainObj = Problem.objects.get(problemcode=problemcode)
+        problemTestcases = Testcase.objects.filter(problem_id=problemMainObj.id)
+        userCodeOutputText = ''
+
+
+
+        if(isCompileSuccess and tmpcompile.returncode == 0):
+
+            # Code Compilation Successfull, now running usercode against testcases
+            # print("COMPILE SUCCESSFULL, now Moving to Testing against Testcases")
+            
+
+
+
+            # print(problemTestcases.values())
+
+            userCodeOutputText = ''
+
+            # for Each Testcase we are running 
+            for eachProblemTestcaseIndex, eachProblemTestcase in enumerate(problemTestcases.values()):
+                # print(eachProblemTestcase,eachProblemTestcase["input_path"])
+
+
+                # Reading Input for Testcase from File
+                getSTDINHandler = open(eachProblemTestcase["input_path"],"r")
+                # print(getSTDINHandler.read())
+
+                try:
+
+                    tmpuseroutput = sb.run("./a.out",stdout=sb.PIPE, stderr=sb.PIPE, stdin=getSTDINHandler)
+                    
+                    
+                except e:
+                    isRunTimeError = True
+                    isUserCodeAcceptable = False
+                    verdict = "RUNTIME ERROR"
+                    status = "RUNTIME ERROR AT TESTCASE "+str(eachProblemTestcase["title"]) + "(id="+str(eachProblemTestcaseIndex)+")"
+                    break
+                    # print("SF") 
+                
+                getSTDINHandler.close()
+
+                userCodeOutputText += ' ----------------- TestcaseIndex='+str(eachProblemTestcaseIndex)+' ----------------- \n :STDOUT:  \n';
+                userCodeOutputText += tmpuseroutput.stdout.decode("utf-8")
+                userCodeOutputText += '\n:STDERR:\n'
+                userCodeOutputText += tmpuseroutput.stderr.decode("utf-8")
+                userCodeOutputText += '\n\n'
+
+
+
+                
+
+                if(tmpuseroutput.returncode != 0):
+                    isRunTimeError = True
+                    isUserCodeAcceptable = False
+                    verdict = "RUNTIME ERROR"
+                    status = "RUNTIME ERROR AT TESTCASE "+str(eachProblemTestcase["title"]) + "(id="+str(eachProblemTestcaseIndex)+")"
+                    break
+
+
+                getCorrectFileHandler = open(eachProblemTestcase["output_path"],"r")
+                correctOutput = getCorrectFileHandler.read()
+                getCorrectFileHandler.close()
+
+                if(correctOutput.split() == str(tmpuseroutput.stdout.decode("utf-8")).split()):
+                    continue
+                else:
+                    # print(eachProblemTestcaseIndex)
+                    isUserCodeAcceptable = False
+                    verdict = "WRONG ANSWER"
+                    status = "WRONG ANSWER AT TESTCASE "+str(eachProblemTestcase["title"]) + "(id="+str(eachProblemTestcaseIndex)+")"
+                    break
+
+        if(isUserCodeAcceptable and not isRunTimeError and not isCompilationError):
+            verdict = "ACCEPTED"
+            status = "SUBMITTED"
+
+            
+
+        score = problemMainObj.score
+        newSubmission = Submission.objects.create(problem_id=problemMainObj.id, user_id=user_id, usersubmissionfile='', verdict=verdict, language=language, status=status, score=score)
+
+        # print(newSubmission)
+
+        submissionPathForThisTestCase = 'files_usersubmissions/'+str(newSubmission.id)
+                # to create directory if not exists
+        if(not os.path.exists(submissionPathForThisTestCase)):
+            os.makedirs(submissionPathForThisTestCase)
+
+                # for storing users output whether it is correct or not it is the submission result
+        f = open(str(submissionPathForThisTestCase+'/submission.txt'), "w")
+        f.write(userCodeOutputText)
+        f.close()
+
+        newSubmission.usersubmissionfile = submissionPathForThisTestCase+'/submission.txt'
+        newSubmission.save()
+
+        if os.path.exists(cppfilename):
+            os.remove(cppfilename)
+
+            
+
+        if os.path.exists("a.out"):
+            os.remove("a.out")
+
+        return JsonResponse({
+            'verdict':verdict,
+            'status' : status,    
+            'submission':str(model_to_dict(newSubmission))
+        })
+
+
 
     except Exception as e: 
-        return JsonResponse({'status':'getProfile EXCEPTION OCCURED', 'exception':str(e)}, status=400)
+        return JsonResponse({'status':'User Submission EXCEPTION OCCURED', 'exception':str(e)}, status=400)

@@ -1,4 +1,0 @@
-code.cpp: In function ‘int main()’:
-code.cpp:18:5: error: ‘out’ was not declared in this scope
-   18 |     out<<"\n";
-      |     ^~~

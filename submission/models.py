@@ -11,10 +11,9 @@ from django.contrib.auth.models import User as UserModel
 class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, null=False)
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, null=False)
-    usercode = models.TextField(null=False)
-    useroutput = models.TextField(null=False)
+    usersubmissionfile = models.TextField(null=False)
     verdict = models.CharField(max_length=20)
     language = models.CharField(null=False, max_length=20)
     status = models.CharField(null=False, max_length=20)
     submissionTime = models.DateTimeField(default=now, editable=False, blank=True)
-    score=models.IntegerField() 
+    score=models.IntegerField()  

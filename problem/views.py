@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse
 
-from .models import Problem
+from .models import Problem, Testcase
 
 
 def create_problem(request):
@@ -32,7 +32,7 @@ def create_problem(request):
 
         # Creating Problem Instance in Database
 
-        newproblem = Problem.objects.create(title=title, description=description, difficulty=difficulty, score=score, problemcode=problemcode, correctoutput=correctoutput)
+        newproblem = Problem.objects.create(title=title, description=description, difficulty=difficulty, score=score, problemcode=problemcode)
 
 
         # Directory path of problem 
@@ -51,6 +51,10 @@ def create_problem(request):
             if(not(("input" in eachTestcase and "output" in eachTestcase))):
                 return JsonResponse({'status':'Properties missing from testcases'}, status=400)
         
+
+        # testcases file paths in list
+        testcasesFilePathInList = []
+
 
         # Checking if all the keys are present in object or not
         for testcaseIndex,eachTestcase in enumerate(testcases):
@@ -72,10 +76,19 @@ def create_problem(request):
             fileHandler = open(testcaseOutputFilePath,"w")
             fileHandler.write(eachTestcase["output"])
             fileHandler.close()
-        
 
+            newTmptestcase = Testcase.objects.create(
+                title=problemcode+'_testcase_'+str(testcaseIndex),
+                input_path = testcaseInputFilePath, 
+                output_path=testcaseOutputFilePath,
+                problem_id = newproblem.id
+                )
 
+            # testcasesFilePathInList.append({'input':testcaseInputFilePath, 'output':testcaseOutputFilePath}) 
 
+        # Storing Paths of Input & Output Files in Databases to reachout those files during problem submissions and testcase against user submissions
+        newproblem.testcasesinputandoutput = str(testcasesFilePathInList)
+        newproblem.save()
 
 
 

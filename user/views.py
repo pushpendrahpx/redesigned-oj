@@ -17,7 +17,7 @@ def register(request):
         jsonData = json.loads(request.body)
 
         if("username" in jsonData and "email" in jsonData and "password" in jsonData and "firstname" in jsonData and "lastname" in jsonData):
-            newuser = UserModel.objects.create_user(jsonData["username"], jsonData["email"],jsonData["password"],first_name=jsonData["firstname"], last_name=jsonData["lastname"])
+            newuser = UserModel.objects.create_user(jsonData["username"], jsonData["email"],jsonData["password"],first_name=jsonData["firstname"], last_name=jsonData["lastname"], is_active=False)
             ourUserModel = User.objects.create(user=newuser, rating=0, status=True, country='India')
             print(newuser)
 
