@@ -13,3 +13,4 @@ class User(models.Model):
     rating = models.IntegerField(default=0)
     status = models.BooleanField(default=1)
     country = models.CharField(max_length=20)
+    token = models.TextField(null=False)

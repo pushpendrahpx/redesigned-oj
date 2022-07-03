@@ -13,6 +13,9 @@ def create_problem(request):
             return JsonResponse({'status':'Invalid create_problem Method'}, status=400)
         
 
+        if(not(request.user.is_authenticated)):
+            return JsonResponse({'status':'User Authentication is required, which is not provided'}, status=400)
+
         jsonData = json.loads(request.body)
 
         if(not("title" in jsonData and "description" in jsonData and "difficulty" in jsonData and "score" in jsonData and "tags" in jsonData and "problemcode" in jsonData and "correctoutput" in jsonData and "testcases" in jsonData)):
@@ -31,8 +34,8 @@ def create_problem(request):
 
 
         # Creating Problem Instance in Database
-
-        newproblem = Problem.objects.create(title=title, description=description, difficulty=difficulty, score=score, problemcode=problemcode)
+        author = request.user
+        newproblem = Problem.objects.create(title=title, description=description, difficulty=difficulty, score=score, problemcode=problemcode, author=author)
 
 
         # Directory path of problem 

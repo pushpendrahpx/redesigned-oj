@@ -5,6 +5,7 @@ from statistics import mode
 from django.db import models
 from pkg_resources import require
 
+from django.contrib.auth.models import User as UserModel
 # Create your models here.
 
 from user.models import User
@@ -16,12 +17,15 @@ class Tag(models.Model):
 
 class Problem(models.Model):
 
+    author = models.ForeignKey(UserModel, on_delete=models.CASCADE, null=False)
+
     class DifficultyLevel(models.TextChoices):
         EASY='EASY'
         MEDIUM='MEDIUM'
         HARD='HARD'
         NOTDEFINED='NOTDEFINED'
     
+
     problemcode = models.CharField(max_length=20, null=False, unique=True, default='')
     title = models.CharField(max_length=100, null=False, default='', unique=True)
     description = models.TextField(null=False)
