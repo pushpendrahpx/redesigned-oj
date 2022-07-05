@@ -1,0 +1,10 @@
+{
+    "SERVER_HOST":"http://192.168.0.105:8000",
+    "APIS":{
+        "REGISTER_USER":"/users/registers/",
+        "LOGIN_USER":"/users/login/",
+        "GET_ALL_PROBLEMS":"/problems/getAllProblems",
+        "GET_PROBLEMS_BY_PAGE":"/problems/getAllProblems/",
+        "GET_PROBLEM_BY_ID":"/problems/getProblemById/"
+    }
+}

@@ -1,0 +1,22 @@
+.homepage-base{
+    padding-top: 20px;
+}
+.homepage-base .homepage-tab{
+    width: 100%;
+    display: flex;
+
+}
+.homepage-base .homepage-tab > div{
+    margin-left: 2px;
+    margin-right: 2px;
+    padding:  6px;
+    border-radius: 2px;
+}
+.homepage-base .homepage-tab > div > a{
+
+    text-decoration: none;
+    color:#009;
+}
+.homepage-base .homepage-tab > div:hover{
+    background-color:  #ebebeb;;
+}

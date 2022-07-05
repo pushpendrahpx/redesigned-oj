@@ -1,0 +1,29 @@
+.navbar-base{
+    background-color: #292929;
+    color: #fff;
+    box-shadow: 0 0.8px 3.2px rgb(0 0 0 / 40%);
+}
+.navbar-base a{
+    color: #fff;
+    text-decoration: none;
+}
+.navbar-base .navbar-brand{
+    font-size: larger;
+    font-weight: 600;
+}
+.navbar-base-object{
+    max-width: 960px;
+    min-height: 46px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 5px 9.6px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+.navbar-base-object > div{
+    float: right;
+}

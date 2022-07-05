@@ -1,0 +1,22 @@
+.pagetab-base{
+    padding-top: 0px;
+}
+.pagetab-base .pagetab-tab{
+    width: 100%;
+    display: flex;
+
+}
+.pagetab-base .pagetab-tab > div{
+    margin-left: 2px;
+    margin-right: 2px;
+    padding:  6px;
+    border-radius: 2px;
+}
+.pagetab-base .pagetab-tab > div > a{
+
+    text-decoration: none;
+    color:#009;
+}
+.pagetab-base .pagetab-tab > div:hover{
+    background-color:  #ebebeb;;
+}
