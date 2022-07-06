@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import APIRoutes from "./../../Utils/APIRoutes.json" 
 import "./Login.component.css"
+import { useNavigate } from "react-router-dom";
 function LoginComponent(){
     
+    let navigate = useNavigate();
     let [resultState, setResultState] = useState({
         isResult: false,
         isLoading: false,
@@ -42,13 +44,14 @@ function LoginComponent(){
                         alertMessage:'Please fill all the fields'
                     }
                 })
-
+                
 
                 return;
             }
         }
         let response = await fetch(APIRoutes.SERVER_HOST + APIRoutes.APIS.LOGIN_USER,{
             method:"POST",
+            credentials: 'include', 
             headers:{
                 'Content-type':'application/json'
             },
@@ -69,6 +72,11 @@ function LoginComponent(){
                     alertMessage:'login successfull'
                 }
             })
+            
+            
+
+            navigate("/")
+
         }else{
             setResultState(prev=>{
                 return {...prev, 

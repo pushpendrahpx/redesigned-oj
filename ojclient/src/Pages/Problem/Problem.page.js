@@ -12,6 +12,8 @@ function ProblemPage (props){
   let {id} = useParams()
 
   let fetchProblemById =  async (problemid)=>{
+
+    console.log("REQUIRED")
   let response = await fetch(APIRoutes.SERVER_HOST +  APIRoutes.APIS.GET_PROBLEM_BY_ID+problemid, {method:"GET"})
   if(response.ok){
     let jsonResponse = await response.json()
@@ -31,7 +33,6 @@ function ProblemPage (props){
 
 
   useEffect(()=>{
-    console.log(props)
     document.title = 'Problemset - Redesigned OJ'
     fetchProblemById(id)
   },[])
@@ -59,7 +60,7 @@ function ProblemPage (props){
       
       <Routes>
         <Route exact path={""} element={<ProblemHome problemDescription={problemState.problem?.description} />} />
-        <Route exact path={"submit"} element={<ProblemSubmitPage />} />
+        <Route exact path={"submit"} element={<ProblemSubmitPage problemDetails={problemState.problem} />} />
       </Routes>
   
       </PagebaseMiddleware>

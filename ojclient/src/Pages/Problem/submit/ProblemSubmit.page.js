@@ -10,13 +10,21 @@ int main(){
   return 0;
 }`
 function ProblemSubmitPage (props){
+  let [results,setResults] = useState({output:'',status:'',submission:'',verdict:'',})
   let [sourcecode,setSourcecode] = useState(defaultCPPCode)
+  let [problem, setProblem] = useState({})
   useEffect(()=>{
-    // console.log(sourcecode)
+    setProblem(props.problemDetails);
   },[sourcecode])
 
 
 
+  useEffect(() => {
+    setProblem(props.problemDetails)
+    // setSuperCount(count * 2);
+  }, [props.problemDetails]);
+
+  
 
   // On File Change
   let onFileSelect = (e)=>{
@@ -45,11 +53,28 @@ function ProblemSubmitPage (props){
 
 
   // Code submit
-  let codeSubmit = (e)=>{
+  let codeSubmit = async (e)=>{
     e.preventDefault()
 
     console.log(sourcecode)
+    let response = await fetch(APIRoutes.SERVER_HOST + APIRoutes.APIS.SUBMIT_PROBLEM, {
+      method:"POST",
+      credentials: "include",
+      headers:{
+        'Content-type':'text/plain',
+        'problemcode':problem.problemcode,
+        'language':'C++'
+      },
+      body: sourcecode
+    })
 
+    let dataResults = await response.json()
+    setResults({
+      output:dataResults.output,
+      status: dataResults.status,
+      submission: dataResults.submission,
+      verdict: dataResults.verdict
+    })
 
   }
 
@@ -59,7 +84,7 @@ function ProblemSubmitPage (props){
 
         <div className="file has-name is-fullwidth">
           <label className="file-label">
-            <input onChange={onFileSelect} className="file-input" type="file" name="code" />
+            <input onChange={onFileSelect} className="file-input" type="file" name="code" accept=".cpp, .py, .java" />
             <span className="file-cta">
               <span className="file-icon">
                 <i className="fas fa-upload"></i>
@@ -93,6 +118,25 @@ function ProblemSubmitPage (props){
         <button className="button is-link">Submit</button>
       </div>
     </form>
+
+
+  {/* Output Section */}
+  <hr />
+    <div>
+    <h5 className="title is-5">Output</h5>
+    {results.output.length == 0 ? 
+      'Please submit to see the output'
+    : 
+        <><table className="table">
+        <tbody>
+          <tr><td><b>verdict : </b></td><td> {results.verdict} {results.verdict == 'ACCEPTED' ? '✅' : '❌'}</td></tr>
+          <tr><td><b>status : </b></td><td> {results.status} {results.status == 'SUBMITTED' ? '✅' : '❌'} </td></tr>
+        </tbody>
+      </table>
+      <pre>{results.output}</pre></>
+    }
+
+    </div>
 
 
   </div>
