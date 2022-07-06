@@ -75,8 +75,14 @@ def login(request):
         if user is not None:
             loginuserobj = LibraryLogin(request, user)
             print(loginuserobj)
+        
+            response = JsonResponse({'message':'Login Successfull', 'object': model_to_dict(user)})
+            print((request.session))
+            for key in request.session.keys():
+                print( "key:=>"+ request.session[key] )
 
-            return JsonResponse({'message':'Login Successfull', 'object': model_to_dict(user)})
+
+            return response
         else:
             # Return an 'invalid login' error message.
             ...

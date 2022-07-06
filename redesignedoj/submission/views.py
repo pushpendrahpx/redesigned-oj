@@ -28,7 +28,7 @@ def create_submission(request):
 
         if(not("problemcode" in request.headers and 
             
-            "code-language" in request.headers)):
+            "language" in request.headers)):
 
             return JsonResponse({'status':'Required Fields are missing in Create Problem API'}, status=400)
 
@@ -37,7 +37,7 @@ def create_submission(request):
         user_id = request.user.id
         problemcode = request.headers["problemcode"]
         usercode=request.body.decode("utf-8")
-        language=request.headers["code-language"]
+        language=request.headers["language"]
 
  
         # newsubmission = Submission(user_id=user, problem_id=problem, usercode=userc)
@@ -189,7 +189,8 @@ def create_submission(request):
         return JsonResponse({
             'verdict':verdict,
             'status' : status,    
-            'submission':str(model_to_dict(newSubmission))
+            'submission':str(model_to_dict(newSubmission)),
+            'output':userCodeOutputText
         })
 
 

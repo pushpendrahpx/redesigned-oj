@@ -51,7 +51,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'user.middleware.CORSMiddleware',
-    'problem.middleware.CORSMiddleware'
+    'problem.middleware.CORSMiddleware',
+    'submission.middleware.CORSMiddleware'
 ]
 
 ROOT_URLCONF = 'redesignedoj.urls'
@@ -132,3 +133,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django Password Reset Auth Token Expire Time
 PASSWORD_RESET_TIMEOUT = 20000
+SESSION_COOKIE_DOMAIN= None
+CORS_ALLOW_CREDENTIALS = True
