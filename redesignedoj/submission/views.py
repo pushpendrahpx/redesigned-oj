@@ -48,6 +48,8 @@ def create_submission(request):
         
 
 
+        userCodeCompilationResults = ''
+
 
         isUserCodeAcceptable = True
         isRunTimeError = False
@@ -58,9 +60,9 @@ def create_submission(request):
         try:
             
             tmpcompile = sb.run("g++ "+cppfilename, shell=True,stdout=sb.PIPE, stderr=sb.PIPE)
-
-        except ew:
-            # print(ew)
+            
+        except Exception:
+            
             isCompileSuccess= False
             isCompilationError = True
             isUserCodeAcceptable = False
@@ -72,6 +74,8 @@ def create_submission(request):
         
         
         
+        if(tmpcompile.returncode != 0):
+            userCodeCompilationResults += (tmpcompile.stderr).decode("utf-8")
 
         if(isCompileSuccess and tmpcompile.returncode != 0):
             isCompilationError = True
@@ -157,8 +161,14 @@ def create_submission(request):
         if(isUserCodeAcceptable and not isRunTimeError and not isCompilationError):
             verdict = "ACCEPTED"
             status = "SUBMITTED"
+        
 
             
+
+        if(isCompilationError):
+            userCodeOutputText = userCodeCompilationResults
+
+
 
         score = problemMainObj.score
         newSubmission = Submission.objects.create(problem_id=problemMainObj.id, user_id=user_id, usersubmissionfile='', verdict=verdict, language=language, status=status, score=score)
@@ -190,10 +200,46 @@ def create_submission(request):
             'verdict':verdict,
             'status' : status,    
             'submission':str(model_to_dict(newSubmission)),
-            'output':userCodeOutputText
+            'output':  userCodeOutputText
         })
 
 
 
     except Exception as e: 
         return JsonResponse({'status':'User Submission EXCEPTION OCCURED', 'exception':str(e)}, status=400)
+
+
+
+
+
+
+def getUserSubmissions(request):
+
+
+        # Only POST Method is accepted
+    if(request.method!="POST"):
+        return JsonResponse({'status':'Invalid Method'})
+
+
+    if(not(request.user.is_authenticated)):
+        return JsonResponse({'status':'User Authentication is required, which is not provided'}, status=400)
+
+
+        
+    try:
+        jsonData = json.loads(request.body)
+        if(not("problemid" in jsonData)):
+            return JsonResponse({'status':'Required Fields are missing in Create Problem API'}, status=400)
+
+        problemid = jsonData["problemid"]
+        userid = request.user.id
+        submissions = Submission.objects.filter(user_id=userid, problem_id=problemid).order_by('-id')
+        # print(submissions)
+        dictsubmission = [model_to_dict(eachSubmission) for eachSubmission in submissions]
+
+        
+        return JsonResponse(dictsubmission, safe=False)
+
+
+    except Exception as e:
+        return JsonResponse({'status':'getUserSubmissions EXCEPTION OCCURED', 'exception':str(e)}, status=400)

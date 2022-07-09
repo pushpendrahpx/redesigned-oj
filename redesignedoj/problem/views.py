@@ -21,7 +21,7 @@ def create_problem(request):
 
         jsonData = json.loads(request.body)
 
-        if(not("title" in jsonData and "description" in jsonData and "difficulty" in jsonData and "score" in jsonData and "tags" in jsonData and "problemcode" in jsonData and "correctoutput" in jsonData and "testcases" in jsonData)):
+        if(not("title" in jsonData and "description" in jsonData and "difficulty" in jsonData and "score" in jsonData and "tags" in jsonData and "problemcode" in jsonData and "testcases" in jsonData)):
             return JsonResponse({'status':'Required Fields are missing in Create Problem API'}, status=400)
 
         title = jsonData["title"]
@@ -29,7 +29,6 @@ def create_problem(request):
         difficulty = jsonData["difficulty"]
         score = jsonData["score"]
         tags = jsonData["tags"]
-        correctoutput = jsonData["correctoutput"]
         
         testcases = jsonData["testcases"]
         
