@@ -14,6 +14,9 @@ function ProblemSubmitPage (props){
   let [sourcecode,setSourcecode] = useState(defaultCPPCode)
   let [problem, setProblem] = useState({})
   useEffect(()=>{
+    console.log(results)
+  }, results)
+  useEffect(()=>{
     setProblem(props.problemDetails);
   },[sourcecode])
 
@@ -68,13 +71,21 @@ function ProblemSubmitPage (props){
       body: sourcecode
     })
 
+    if(response.ok){
+
     let dataResults = await response.json()
+    console.log(dataResults)
     setResults({
       output:dataResults.output,
       status: dataResults.status,
       submission: dataResults.submission,
       verdict: dataResults.verdict
     })
+    }else{
+      
+      let dataResults = await response.json();
+      alert(dataResults.status)
+    }
 
   }
 

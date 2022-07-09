@@ -4,6 +4,7 @@ import PagetabComponent from "../../Components/Pagetab/Pagetab.component";
 import PagebaseMiddleware from "../../Middlewares/Pagebase/Pagebase.middleware";
 import APIRoutes from "./../../Utils/APIRoutes.json"
 import ProblemHome from "./home/ProblemHome";
+import ProblemSubmissionsPage from "./submissions/ProblemSubmissions.page";
 import ProblemSubmitPage from "./submit/ProblemSubmit.page";
 
 function ProblemPage (props){
@@ -40,6 +41,7 @@ function ProblemPage (props){
   let problemTabItems = [
     {to: "/problem/" + id +"/", content: 'Problem'  },
     {to:"/problem/" + id + "/submit", content: 'Submit'  },
+    {to:"/problem/" + id + "/submissions", content: 'Submissions'  },
   ]
 
   return <PagebaseMiddleware>
@@ -61,7 +63,13 @@ function ProblemPage (props){
       <Routes>
         <Route exact path={""} element={<ProblemHome problemDescription={problemState.problem?.description} />} />
         <Route exact path={"submit"} element={<ProblemSubmitPage problemDetails={problemState.problem} />} />
+        <Route exact path={"submissions"} element={<ProblemSubmissionsPage problemDetails={problemState.problem} problemid = {id} />} />
       </Routes>
+
+
+      <br />
+      <br />
+      <br />
   
       </PagebaseMiddleware>
 }
