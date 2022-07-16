@@ -7,6 +7,7 @@
         "GET_PROBLEMS_BY_PAGE":"/problems/getAllProblems/",
         "GET_PROBLEM_BY_ID":"/problems/getProblemById/",
         "SUBMIT_PROBLEM":"/submissions/create_submission/",
-        "GET_USER_SUBMISSIONS":"/submissions/get_user_submissions/"
+        "GET_USER_SUBMISSIONS":"/submissions/get_user_submissions/",
+        "CREATE_PROBLEM":"/problems/create_problem/"
     }
 }

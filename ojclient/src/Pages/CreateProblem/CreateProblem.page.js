@@ -4,7 +4,7 @@ import PagetabComponent from "../../Components/Pagetab/Pagetab.component";
 import PagebaseMiddleware from "../../Middlewares/Pagebase/Pagebase.middleware";
 import "./CreateProblem.page.css";
 
-
+import APIRoutes from "./../../Utils/APIRoutes.json"
 let tabItemData = [
   {to:"/", content: 'Home'  },
   {to:"/contests", content: 'Contests'  },
@@ -12,18 +12,31 @@ let tabItemData = [
   {to:"/about", content: 'About'  },
   
 ]
+
+
+let defaultForm = {
+    title: 'rre',
+    problemcode:'ergfret',
+    description:'egrtg',
+    difficulty: 'EASY',
+    score: 4,
+    tags:["DP"],
+    testcases:[{ input: 'sf', output: 'df' }]
+
+}
+let emptyForm = {
+    title: '',
+    problemcode:'',
+    description:'',
+    difficulty: 'EASY',
+    score: 1,
+    tags:[],
+    testcases:[{ input: '', output: '' }]
+
+}
 function CreateProblemPage() {
 
-    let [formState, setFormState] = useState({
-        title: '',
-        problemcode:'',
-        description:'',
-        difficulty: 'EASY',
-        score: '',
-        tags:[],
-        testcases:[{ input: '', output: '' }]
-
-    })
+    let [formState, setFormState] = useState(emptyForm)
     useEffect(()=>{
         console.log(formState)
     },[formState]);
@@ -109,8 +122,30 @@ function CreateProblemPage() {
     }
 
 
-    let formSubmit = (e)=>{
+    let formSubmit = async (e)=>{
         e.preventDefault();
+        if(formState.testcases.length == 0 ){
+            alert("Please Fill all the testcases")
+            return;
+        }
+        let text = JSON.stringify(formState)
+        let response = await fetch(APIRoutes.SERVER_HOST + APIRoutes.APIS.CREATE_PROBLEM, {
+            method:"POST",
+            credentials:'include',
+            headers:{
+                'content-type':'application/json'
+            },
+            body: text
+        });
+        if(response.ok){
+            let data = await response.json()
+            setFormState(emptyForm)
+            alert(JSON.stringify(data))
+        }else{
+            let data = await response.json()
+            alert(JSON.stringify(data))
+
+        }
     }
   useEffect(() => {
     // For declaring Title
@@ -126,7 +161,7 @@ function CreateProblemPage() {
           <div class="field">
             <label class="label">Problem Code *</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Enter Problem Code" name="problemcode" defaultValue={ formState.problemcode } required onChange={inputChange} />
+                <input class="input" type="text" minLength={1} placeholder="Enter Problem Code" name="problemcode" defaultValue={ formState.problemcode } required onChange={inputChange} />
                 <small>Without space</small>
             </div>
             </div>
@@ -135,7 +170,7 @@ function CreateProblemPage() {
             <div class="field">
             <label class="label">Problem Title *</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Problem Title" name="title" defaultValue={ formState.title } required onChange={inputChange}/>
+                <input class="input" type="text" minLength={1} placeholder="Problem Title" name="title" defaultValue={ formState.title } required onChange={inputChange}/>
             </div>
             </div>
 
@@ -143,7 +178,7 @@ function CreateProblemPage() {
             <div class="field">
             <label class="label">Problem Description *</label>
             <div class="control">
-                <textarea class="textarea" placeholder="Problem Description ... (Including Sample testcases here)" defaultValue={ formState.description } required name="description" onChange={inputChange}></textarea>
+                <textarea class="textarea" minLength={1} placeholder="Problem Description ... (Including Sample testcases here)" defaultValue={ formState.description } required name="description" onChange={inputChange}></textarea>
             </div>
             </div>
 
@@ -167,7 +202,7 @@ function CreateProblemPage() {
             <label class="label">Tags</label>
             <div class="control">
                 <div class="select is-multiple">
-                <select multiple name="tags" onChange={inputChange} defaultValue={ formState.tags }>
+                <select  multiple name="tags" onChange={inputChange} defaultValue={ formState.tags }>
                     <option>Select Tags</option>
                     <option value={"DP"}>DP</option>
                     <option value={"GRAPH"}>Graph</option>
@@ -180,7 +215,7 @@ function CreateProblemPage() {
             <div class="field">
             <label class="label">Score *</label>
             <div class="control">
-                <input className="input" type="number" placeholder="Please Enter Score " defaultValue={ formState.score } required name="score" onChange={inputChange} />
+                <input className="input" type="number" placeholder="Please Enter Score " min="1" max="4" defaultValue={ formState.score } required name="score" onChange={inputChange} />
             </div>
             </div>
 
@@ -200,11 +235,11 @@ function CreateProblemPage() {
 
                                     <div class="control">
                                         <div className="label">Input {eachindex}</div>
-                                        <textarea class="textarea" placeholder="Input here" required name="input" onChange={(e)=>onTestcaseInputChange(e, eachindex)}></textarea>
+                                        <textarea class="textarea" minLength={1} placeholder="Input here" required name="input" defaultValue={eachtestcase.input} onChange={(e)=>onTestcaseInputChange(e, eachindex)}></textarea>
                                     </div>
                                     <div class="control">
                                         <div className="label">Output {eachindex}</div>
-                                        <textarea class="textarea" placeholder="Output Here" required name="output" onChange={(e)=>onTestcaseInputChange(e, eachindex)}></textarea>
+                                        <textarea class="textarea" minLength={1} placeholder="Output Here" required name="output" defaultValue={eachtestcase.output} onChange={(e)=>onTestcaseInputChange(e, eachindex)}></textarea>
                                     </div>
                                     <br />
                                     <button className="button is-danger" onClick={()=>removeTestcase(eachindex)}>Remove</button>
