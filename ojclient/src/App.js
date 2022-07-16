@@ -17,6 +17,7 @@ import LoginPage from "./Pages/Login/Login.page";
 import RegisterPage from "./Pages/Register/Register.page";
 import ProblemPage from "./Pages/Problem/Problem.page";
 import ProblemSubmitPage from "./Pages/Problem/submit/ProblemSubmit.page";
+import CreateProblemPage from "./Pages/CreateProblem/CreateProblem.page";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/register" element={<RegisterPage /> } />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/problem/:id*" element={<ProblemPage /> } />
+          <Route path="/createproblem" element={<CreateProblemPage /> } />
         </Routes>
 
             <FooterComponent />

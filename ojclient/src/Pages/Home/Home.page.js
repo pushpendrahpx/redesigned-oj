@@ -31,6 +31,8 @@ function HomePage() {
           <li>Blogs</li>
           <li>About</li>
         </ul>
+
+        <Link to="/createproblem">Create Problem</Link>
     </PagebaseMiddleware>;
   }
 export default HomePage   

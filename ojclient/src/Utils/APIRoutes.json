@@ -1,7 +1,7 @@
 {
     "SERVER_HOST":"http://localhost:8000",
     "APIS":{
-        "REGISTER_USER":"/users/registers/",
+        "REGISTER_USER":"/users/register/",
         "LOGIN_USER":"/users/login/",
         "GET_ALL_PROBLEMS":"/problems/getAllProblems",
         "GET_PROBLEMS_BY_PAGE":"/problems/getAllProblems/",
