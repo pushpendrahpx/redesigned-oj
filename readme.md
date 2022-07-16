@@ -9,9 +9,15 @@ This is an online-judge implements basic functionalities and unique features tha
 2. ER Diagram - [Basic ER Diagram of System](https://erdplus.com/edit-diagram/5ab7538f-4725-40a7-9da4-a5cc876e1150)
 3. Schema Design - [Basic Schema Design of System](https://drawsql.app/none-538/diagrams/online-judge)
 
+### Docker Container ( Recommended )
+1. ``` git clone <this-repository> ```
+2. ``` docker compose up ```
 
 ### Requirements
 Python3, pip3, Django
+
+### env file
+Create ```.env``` file having variable = MAILJET_API_KEY, MAILJET_SECRET_KEY, OWNER_FROM_NAME, OWNER_FROM_EMAIL.
 
 ### Steps of Installation
 1. Install all the dependencies from ```requirements.txt```
