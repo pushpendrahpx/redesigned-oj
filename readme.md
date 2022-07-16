@@ -9,7 +9,8 @@ This is an online-judge implements basic functionalities and unique features tha
 2. ER Diagram - [Basic ER Diagram of System](https://erdplus.com/edit-diagram/5ab7538f-4725-40a7-9da4-a5cc876e1150)
 3. Schema Design - [Basic Schema Design of System](https://drawsql.app/none-538/diagrams/online-judge)
 
-### Docker Container ( Recommended )
+### Docker Container ( Recommended ) for server ONLY
+For REACT APP, for as of now we can start in dev & use it.
 1. ``` git clone <this-repository> ```
 2. ``` docker compose up ```
 
