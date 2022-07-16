@@ -10,3 +10,10 @@ services:
       - "8000:8000"
     environment:
       SERVER_NAME: mainserver
+
+  
+  executionengine:
+    build: executionengine/.
+    command: node index.js
+    environment:
+      SERVER_NAME: executionengine
