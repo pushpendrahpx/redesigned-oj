@@ -30,6 +30,7 @@ app.use(bodyParser.json());
 app.post('/run', async (req, res) => {
   let filename = makeid(10);
   try{
+	console.log("GOT Requirest\n");
     let {input, code} = req.body;
     input = Buffer.from(input, 'utf-8').toString();
     code = Buffer.from(code, 'utf-8').toString();

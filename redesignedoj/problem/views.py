@@ -7,7 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 
 
-from .models import Problem, Testcase
+from .models import Problem, Testcase, Tag
 
 
 def create_problem(request):
@@ -152,3 +152,23 @@ def getProblemById(request,id):
 
     
     return JsonResponse(dicteach, safe=False)
+
+def getTags(request):
+    if(request.method != "GET"):
+        return JsonResponse({'status':'Invalid getProblemId Method'}, status=400)
+
+
+    tags = Tag.objects.all().values()
+    
+    # list_tags = []
+    # for each in tags:
+    #     # tj = json.loads(tagss)
+    #     print(each)
+    #     dicteach = model_to_dict(each)
+
+    #     list_tags.append(dicteach)
+
+    # print(list_tags)
+
+    list_result = [dict(entry) for entry in tags]
+    return JsonResponse(list_result, safe=False)
