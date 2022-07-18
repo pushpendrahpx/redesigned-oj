@@ -37,6 +37,24 @@ let emptyForm = {
 function CreateProblemPage() {
 
     let [formState, setFormState] = useState(emptyForm)
+    let [allTags, setAllTags] = useState([]);
+
+
+    let getAllTags = async ()=>{
+        try{
+            let response = await fetch(APIRoutes.SERVER_HOST+APIRoutes.APIS.GET_ALL_TAGS)
+            let data = await response.json()
+            console.log(data)
+            setAllTags(data)
+        }catch(e){
+            alert(e)
+        }
+    }
+
+
+    useEffect(()=>{
+        getAllTags()
+    },[]);
     useEffect(()=>{
         console.log(formState)
     },[formState]);
@@ -204,8 +222,9 @@ function CreateProblemPage() {
                 <div class="select is-multiple">
                 <select  multiple name="tags" onChange={inputChange} defaultValue={ formState.tags }>
                     <option>Select Tags</option>
-                    <option value={"DP"}>DP</option>
-                    <option value={"GRAPH"}>Graph</option>
+                    {allTags.map((eachTag, eachindex)=>{
+                        return <option key={eachindex} value={String(eachTag.tagname).toUpperCase()}> { eachTag.tagname} </option>
+                    })}
                 </select>
                 </div>
             </div>

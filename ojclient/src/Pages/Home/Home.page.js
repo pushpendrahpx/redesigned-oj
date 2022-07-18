@@ -28,7 +28,7 @@ function HomePage() {
         <ul>
           <li>Problem set</li>
           <li>Contests</li>
-          <li>Blogs</li>
+          <li><a href="https://pushpendrahpx.github.io">Blogs</a></li>
           <li>About</li>
         </ul>
 

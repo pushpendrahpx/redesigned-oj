@@ -37,7 +37,7 @@ def register(request):
                 'user': {'username':jsonData["username"]},  
                 'domain': 'pushpendrahpx.me',  
                 'uid':uidb64,  
-                'token':'http://192.168.0.105:8000/users/activate/'+uidb64+'/'+account_activation_token.make_token(newuser),  
+                'token':'https://redesignedoj-server.pushpendrahpx.me/users/activate/'+uidb64+'/'+account_activation_token.make_token(newuser),  
             }
 
             ourUserModel.token = message["token"]
