@@ -72,6 +72,8 @@ function LoginComponent(){
                     alertMessage:'login successfull'
                 }
             })
+
+            alert("Login Successfull, goto problem section to solve problems")
             
             
 
@@ -86,6 +88,7 @@ function LoginComponent(){
                     alertMessage:'login failed'
                 }
             })
+            alert("Login Failed")
         }
     }
 
