@@ -2,6 +2,8 @@
 # Welcome to redesigned-oj!
 This is an online-judge implements basic functionalities and unique features that are attractions of this online-judge.
 
+Live Site - https://redesignedoj.pushpendrahpx.me/
+
 
 
 ### Database Design
